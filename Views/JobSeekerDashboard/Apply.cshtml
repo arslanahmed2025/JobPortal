@@ -1,0 +1,47 @@
+﻿@model JobPortal.Models.ViewModels.JobApplyViewModel
+
+@{
+    ViewData["Title"] = "Apply for Job";
+}
+
+<style>
+    .form-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 30px;
+        max-width: 700px;
+    }
+</style>
+
+<h2>Apply for @Model.JobTitle</h2>
+<p class="text-muted">@Model.CompanyName</p>
+
+<div class="form-card mt-3">
+    <form asp-action="Apply" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="JobPostingId" />
+        <input type="hidden" asp-for="JobTitle" />
+        <input type="hidden" asp-for="CompanyName" />
+
+        <div class="mb-3">
+            <label asp-for="ResumeFile" class="form-label"></label>
+            <input asp-for="ResumeFile" type="file" class="form-control" accept="application/pdf" />
+            <span asp-validation-for="ResumeFile" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CoverLetter" class="form-label"></label>
+            <textarea asp-for="CoverLetter" class="form-control" rows="5"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Application</button>
+        <a asp-action="JobDetails" asp-route-id="@Model.JobPostingId" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

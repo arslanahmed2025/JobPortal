@@ -1,0 +1,105 @@
+﻿@model JobPortal.Models.EmployerProfile
+@{
+    ViewData["Title"] = "Employer Dashboard";
+    var jobs = ViewBag.JobPostings as List<JobPortal.Models.JobPosting>;
+}
+<style>
+    .dashboard-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 24px;
+        margin-bottom: 20px;
+    }
+    .logo-preview {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+    .no-profile-box {
+        text-align: center;
+        padding: 40px;
+    }
+    .job-row {
+        border-bottom: 1px solid #eee;
+        padding: 14px 0;
+    }
+        .job-row:last-child {
+            border-bottom: none;
+        }
+    .badge-active {
+        background-color: #198754;
+    }
+    .badge-inactive {
+        background-color: #6c757d;
+    }
+</style>
+<h2>Welcome, Employer!</h2>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+}
+@if (Model == null)
+{
+    <div class="dashboard-card no-profile-box">
+        <h4>Aapne abhi tak Company Profile nahi banaya</h4>
+        <p class="text-muted">Job posting shuru karne se pehle apna company profile complete karo.</p>
+        <a asp-action="Profile" class="btn btn-primary">Create Company Profile</a>
+    </div>
+}
+else
+{
+    <div class="dashboard-card d-flex align-items-center">
+        @if (!string.IsNullOrEmpty(Model.LogoPath))
+        {
+            <img src="@Model.LogoPath" class="logo-preview me-3" alt="Company Logo" />
+        }
+        <div>
+            <h4 class="mb-1">@Model.CompanyName</h4>
+            <p class="text-muted mb-1">@Model.Industry @(!string.IsNullOrEmpty(Model.Location) ? " • " + Model.Location : "")</p>
+            <a asp-action="Profile" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+        </div>
+    </div>
+    <div class="dashboard-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Job Postings</h5>
+            <a asp-action="JobCreate" class="btn btn-primary btn-sm">+ Post New Job</a>
+        </div>
+        @if (jobs == null || !jobs.Any())
+        {
+            <p class="text-muted">Abhi tak koi job post nahi ki. "+ Post New Job" pe click karo.</p>
+        }
+        else
+        {
+            foreach (var job in jobs)
+            {
+                <div class="job-row d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="mb-1">
+                            @job.Title
+                            <span class="badge @(job.IsActive ? "badge-active" : "badge-inactive")">
+                                @(job.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </h6>
+                        <p class="text-muted mb-0 small">
+                            @job.JobType.ToString() @(!string.IsNullOrEmpty(job.Location) ? " • " + job.Location : "") • Posted @job.PostedDate.ToString("dd MMM yyyy")
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a asp-action="JobApplications" asp-route-id="@job.Id" class="btn btn-outline-primary btn-sm">Applications</a>
+                        <a asp-action="JobEdit" asp-route-id="@job.Id" class="btn btn-outline-secondary btn-sm">Edit</a>
+                        <form asp-action="JobDelete" asp-route-id="@job.Id" method="post" onsubmit="return confirm('Pakka delete karna hai?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}

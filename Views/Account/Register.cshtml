@@ -1,0 +1,137 @@
+﻿@model JobPortal.Models.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Create Account</h2>
+
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Register as</label>
+                <div class="role-options">
+                    <label class="role-option">
+                        <input type="radio" name="Role" value="JobSeeker" checked />
+                        Job Seeker
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="Role" value="Employer" />
+                        Employer
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Register</button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account? <a asp-action="Login">Login here</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        background-color: #f0f2f5;
+    }
+
+    .auth-card {
+        background: #fff;
+        padding: 30px 35px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        width: 400px;
+    }
+
+    .auth-card h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #0a66c2;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccd0d5;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    .role-options {
+        display: flex;
+        gap: 20px;
+    }
+
+    .role-option {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: normal;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 10px;
+        background-color: #0a66c2;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+        background-color: #084d92;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+</style>

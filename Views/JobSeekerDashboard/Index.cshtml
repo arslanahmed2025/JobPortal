@@ -1,0 +1,56 @@
+﻿@model List<JobPortal.Models.JobPosting>
+
+@{
+    ViewData["Title"] = "Browse Jobs";
+}
+
+<style>
+    .job-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+
+    .search-box {
+        max-width: 500px;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Browse Jobs</h2>
+    <a asp-action="MyApplications" class="btn btn-outline-primary">My Applications</a>
+</div>
+
+<form method="get" class="search-box mb-4 d-flex gap-2">
+    <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search by title, category, or location..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Koi job nahi mili.</p>
+}
+else
+{
+    foreach (var job in Model)
+    {
+        <div class="job-card">
+            <h5 class="mb-1">@job.Title</h5>
+            <p class="text-muted mb-2">
+                @job.EmployerProfile.CompanyName • @job.JobType.ToString() @(!string.IsNullOrEmpty(job.Location) ? " • " + job.Location : "")
+            </p>
+            <a asp-action="JobDetails" asp-route-id="@job.Id" class="btn btn-sm btn-primary">View Details</a>
+        </div>
+    }
+}

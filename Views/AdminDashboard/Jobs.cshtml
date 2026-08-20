@@ -1,0 +1,63 @@
+﻿@model List<JobPortal.Models.JobPosting>
+
+@{
+    ViewData["Title"] = "Manage Jobs";
+}
+
+<style>
+    .table-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+</style>
+
+<h2>Manage Jobs</h2>
+<a asp-action="Index" class="btn btn-outline-secondary mb-3">Back to Dashboard</a>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div class="table-card">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Posted</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr>
+                    <td>@job.Title</td>
+                    <td>@job.EmployerProfile.CompanyName</td>
+                    <td>@job.JobType.ToString()</td>
+                    <td>
+                        @if (job.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inactive</span>
+                        }
+                    </td>
+                    <td>@job.PostedDate.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <form asp-action="DeleteJob" asp-route-id="@job.Id" method="post" onsubmit="return confirm('Pakka is job ko delete karna hai?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

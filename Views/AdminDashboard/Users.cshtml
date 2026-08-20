@@ -1,0 +1,79 @@
+﻿@model List<JobPortal.Models.ViewModels.AdminUserViewModel>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<style>
+    .table-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+</style>
+
+<h2>Manage Users</h2>
+<a asp-action="Index" class="btn btn-outline-secondary mb-3">Back to Dashboard</a>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="table-card">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td><span class="badge bg-info">@user.Role</span></td>
+                    <td>
+                        @if (user.IsBlocked)
+                        {
+                            <span class="badge bg-danger">Blocked</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                    </td>
+                    <td>
+                        @if (user.Role != "Admin")
+                        {
+                            <form asp-action="ToggleUserStatus" asp-route-id="@user.Id" method="post" onsubmit="return confirm('Pakka karna hai?');">
+                                @if (user.IsBlocked)
+                                {
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Unblock</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Block</button>
+                                }
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">—</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

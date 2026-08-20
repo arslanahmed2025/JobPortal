@@ -1,0 +1,203 @@
+﻿@model JobPortal.Models.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+    bool isJobSeeker = User.Identity.IsAuthenticated && User.IsInRole("JobSeeker");
+    bool isEmployer = User.Identity.IsAuthenticated && User.IsInRole("Employer");
+}
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary) 0%, #4a9eff 100%);
+        border-radius: var(--radius);
+        padding: 50px 40px;
+        color: #fff;
+        margin-bottom: 30px;
+    }
+
+        .hero-section h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero-section .btn-light {
+            font-weight: 600;
+        }
+
+    .section-title {
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    .mini-job-row {
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+    }
+
+        .mini-job-row:last-child {
+            border-bottom: none;
+        }
+
+    .deadline-badge {
+        background-color: var(--warning);
+        color: #fff;
+        font-size: 0.75rem;
+    }
+
+    .featured-employer-card {
+        background: linear-gradient(135deg, #fff 0%, var(--primary-light) 100%);
+        border: 1px solid var(--border-color);
+    }
+
+    .crown-icon {
+        font-size: 1.5rem;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <h1>Find Your Next Career Move Here</h1>
+    <p class="mb-4">Best Companies, Best Opportunities — All in One Place.</p>
+
+    @if (isJobSeeker)
+    {
+        <a asp-controller="JobSeekerDashboard" asp-action="Index" class="btn btn-light">Browse Jobs & Apply</a>
+    }
+    else if (isEmployer)
+    {
+        <a asp-controller="EmployerDashboard" asp-action="JobCreate" class="btn btn-light">+ Post a Job</a>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Register" class="btn btn-light">Apply for a Job — Register Now</a>
+    }
+</div>
+
+<!-- Stats Row -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4">
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalActiveJobs</div>
+            <div class="text-muted">Active Jobs</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalEmployers</div>
+            <div class="text-muted">Companies Hiring</div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="stat-card">
+            <div class="stat-number">@Model.SelectedThisMonth</div>
+            <div class="text-muted">Selected This Month</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Left column: Job Notifications + Future Opportunities -->
+    <div class="col-lg-8">
+        <!-- Job Notifications / Updates -->
+        <div class="card-box">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="section-title mb-0">🔔 Latest Job Notifications</h5>
+                @if (isJobSeeker)
+                {
+                    <a asp-controller="JobSeekerDashboard" asp-action="Index" class="btn btn-sm btn-outline-primary">View All</a>
+                }
+            </div>
+
+            @if (!Model.RecentJobs.Any())
+            {
+                <p class="text-muted">Abhi tak koi job post nahi hui.</p>
+            }
+            else
+            {
+                foreach (var job in Model.RecentJobs)
+                {
+                    <div class="mini-job-row d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>@job.Title</strong>
+                            <div class="text-muted small">
+                                @job.EmployerProfile.CompanyName
+                                @(!string.IsNullOrEmpty(job.Location) ? " • " + job.Location : "")
+                                • Posted @job.PostedDate.ToString("dd MMM")
+                            </div>
+                        </div>
+                        @if (isJobSeeker)
+                        {
+                            <a asp-controller="JobSeekerDashboard" asp-action="JobDetails" asp-route-id="@job.Id" class="btn btn-sm btn-primary">Apply</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-primary">Apply</a>
+                        }
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Future Opportunities — Deadline Soon -->
+        <div class="card-box">
+            <h5 class="section-title">⏳ Future Opportunities — Apply Soon</h5>
+
+            @if (!Model.DeadlineSoonJobs.Any())
+            {
+                <p class="text-muted">Abhi koi job apni deadline ke qareeb nahi hai.</p>
+            }
+            else
+            {
+                foreach (var job in Model.DeadlineSoonJobs)
+                {
+                    <div class="mini-job-row d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>@job.Title</strong>
+                            <div class="text-muted small">
+                                @job.EmployerProfile.CompanyName
+                                • Deadline: @job.Deadline?.ToString("dd MMM yyyy")
+                            </div>
+                        </div>
+                        <span class="badge deadline-badge">Closing Soon</span>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Right column: Employee of the Month -->
+    <div class="col-lg-4">
+        <div class="card-box featured-employer-card text-center">
+            <div class="crown-icon mb-2">👑</div>
+            <h6 class="section-title">Employer of the Month</h6>
+
+            @if (Model.FeaturedEmployer == null)
+            {
+                <p class="text-muted small">No featured employers available right now. </p>
+            }
+            else
+            {
+                @if (!string.IsNullOrEmpty(Model.FeaturedEmployer.LogoPath))
+                {
+                    <img src="@Model.FeaturedEmployer.LogoPath" class="logo-preview mb-2" alt="Logo" style="width:70px;height:70px;" />
+                }
+                <h5 class="mb-1">@Model.FeaturedEmployer.CompanyName</h5>
+                <p class="text-muted small mb-2">@Model.FeaturedEmployer.Industry</p>
+                <span class="badge bg-primary">@Model.FeaturedEmployerJobCount Jobs Posted</span>
+            }
+        </div>
+
+        <div class="card-box text-center">
+            <h6 class="section-title">Apply for a Job</h6>
+            <p class="text-muted small">Discover new opportunities and apply directly.</p>
+            @if (isJobSeeker)
+            {
+                <a asp-controller="JobSeekerDashboard" asp-action="Index" class="btn btn-primary w-100">Browse Jobs</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary w-100">Get Started</a>
+            }
+        </div>
+    </div>
+</div>

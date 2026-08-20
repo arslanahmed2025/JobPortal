@@ -1,0 +1,205 @@
+/* ================= JobPortal Design System ================= */
+
+:root {
+    --primary: #1877f2;
+    --primary-dark: #145dc4;
+    --primary-light: #e7f0ff;
+    --success: #198754;
+    --danger: #dc3545;
+    --warning: #f0ad4e;
+    --text-dark: #1c1e21;
+    --text-muted: #65676b;
+    --bg-light: #f0f2f5;
+    --border-color: #dddfe2;
+    --radius: 10px;
+}
+
+html, body {
+    height: 100%;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+    a:hover {
+        color: var(--primary-dark);
+    }
+
+/* ---------- Navbar ---------- */
+.navbar {
+    background-color: #fff !important;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary) !important;
+    font-size: 1.4rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-dark) !important;
+}
+
+    .nav-link:hover {
+        color: var(--primary) !important;
+    }
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+/* ---------- Shared Card ---------- */
+.card-box {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.card-box-sm {
+    padding: 16px;
+}
+
+/* ---------- Stat Cards (Admin dashboard) ---------- */
+.stat-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 22px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* ---------- Badges ---------- */
+.badge-active {
+    background-color: var(--success) !important;
+}
+
+.badge-inactive {
+    background-color: var(--text-muted) !important;
+}
+
+/* ---------- Forms ---------- */
+.form-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 30px;
+    max-width: 700px;
+    border: 1px solid var(--border-color);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(24, 119, 242, 0.15);
+}
+
+label.form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* ---------- Job/Listing rows ---------- */
+.job-row, .app-row, .job-card, .app-card {
+    border-bottom: 1px solid #eee;
+    padding: 16px 0;
+}
+
+    .job-row:last-child, .app-row:last-child {
+        border-bottom: none;
+    }
+
+.job-card, .app-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ---------- Logo previews ---------- */
+.logo-preview, .current-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* ---------- Page heading ---------- */
+h2 {
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* ---------- Footer ---------- */
+.footer {
+    background-color: #fff;
+    border-top: 1px solid var(--border-color);
+    padding: 16px 0;
+    color: var(--text-muted);
+}
+
+/* ---------- Table (Admin) ---------- */
+.table-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.table thead {
+    background-color: var(--primary-light);
+}
+
+
+/* ================= Footer Position Fix ================= */
+html {
+    position: static !important;
+    min-height: auto !important;
+}
+
+body {
+    margin-bottom: 0 !important;
+}
+
+.footer {
+    position: static !important;
+    width: 100% !important;
+}

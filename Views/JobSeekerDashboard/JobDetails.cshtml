@@ -1,0 +1,57 @@
+﻿@model JobPortal.Models.JobPosting
+
+@{
+    ViewData["Title"] = "Job Details";
+    bool alreadyApplied = ViewBag.AlreadyApplied;
+}
+
+<style>
+    .detail-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 30px;
+        max-width: 800px;
+    }
+</style>
+
+<div class="detail-card mt-3">
+    <h2>@Model.Title</h2>
+    <p class="text-muted">
+        @Model.EmployerProfile.CompanyName
+        @(!string.IsNullOrEmpty(Model.Location) ? " • " + Model.Location : "")
+        • @Model.JobType.ToString()
+    </p>
+
+    @if (Model.SalaryMin != null || Model.SalaryMax != null)
+    {
+        <p><strong>Salary:</strong> @Model.SalaryMin - @Model.SalaryMax</p>
+    }
+
+    @if (Model.Deadline != null)
+    {
+        <p><strong>Deadline:</strong> @Model.Deadline.Value.ToString("dd MMM yyyy")</p>
+    }
+
+    <hr />
+    <h5>Description</h5>
+    <p>@Model.Description</p>
+
+    @if (!string.IsNullOrEmpty(Model.Requirements))
+    {
+        <h5>Requirements</h5>
+        <p>@Model.Requirements</p>
+    }
+
+    <hr />
+
+    @if (alreadyApplied)
+    {
+        <button class="btn btn-secondary" disabled>Already Applied</button>
+    }
+    else
+    {
+        <a asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">Apply Now</a>
+    }
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to Jobs</a>
+</div>

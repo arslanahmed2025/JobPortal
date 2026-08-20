@@ -1,0 +1,100 @@
+﻿@model JobPortal.Models.ViewModels.EmployerProfileViewModel
+
+@{
+    ViewData["Title"] = "Company Profile";
+}
+
+<style>
+    .form-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 30px;
+        max-width: 700px;
+    }
+
+    .current-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+</style>
+
+<h2>Company Profile</h2>
+
+<div class="form-card mt-3">
+    <form asp-action="Profile" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        @if (!string.IsNullOrEmpty(Model.ExistingLogoPath))
+        {
+            <div class="mb-3">
+                <label class="form-label d-block">Current Logo</label>
+                <img src="@Model.ExistingLogoPath" class="current-logo" alt="Current Logo" />
+            </div>
+        }
+
+        <div class="mb-3">
+            <label asp-for="LogoFile" class="form-label"></label>
+            <input asp-for="LogoFile" type="file" class="form-control" accept="image/*" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CompanyName" class="form-label"></label>
+            <input asp-for="CompanyName" class="form-control" />
+            <span asp-validation-for="CompanyName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CompanyDescription" class="form-label"></label>
+            <textarea asp-for="CompanyDescription" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Website" class="form-label"></label>
+            <input asp-for="Website" class="form-control" placeholder="https://..." />
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Industry" class="form-label"></label>
+                <input asp-for="Industry" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Location" class="form-label"></label>
+                <input asp-for="Location" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="FoundedYear" class="form-label"></label>
+                <input asp-for="FoundedYear" type="number" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="CompanySize" class="form-label"></label>
+                <select asp-for="CompanySize" class="form-control">
+                    <option value="">-- Select --</option>
+                    <option value="1-10">1-10</option>
+                    <option value="11-50">11-50</option>
+                    <option value="51-200">51-200</option>
+                    <option value="201-500">201-500</option>
+                    <option value="500+">500+</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Profile</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

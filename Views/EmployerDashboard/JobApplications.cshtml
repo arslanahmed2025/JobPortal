@@ -1,0 +1,71 @@
+﻿@model List<JobPortal.Models.JobApplication>
+
+@{
+    ViewData["Title"] = "Applications";
+    string jobTitle = ViewBag.JobTitle;
+    int jobId = ViewBag.JobId;
+}
+
+<style>
+    .app-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+
+    .status-select {
+        max-width: 160px;
+    }
+</style>
+
+<h2>Applications for "@jobTitle"</h2>
+<a asp-action="Index" class="btn btn-outline-secondary mb-3">Back to Dashboard</a>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Abhi tak koi application nahi aayi.</p>
+}
+else
+{
+    foreach (var app in Model)
+    {
+        <div class="app-card d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">@app.JobSeeker.FullName</h6>
+                <p class="text-muted mb-1 small">@app.JobSeeker.Email • Applied @app.AppliedDate.ToString("dd MMM yyyy")</p>
+
+                @if (!string.IsNullOrEmpty(app.CoverLetter))
+                {
+                    <p class="mb-1"><strong>Cover Letter:</strong> @app.CoverLetter</p>
+                }
+
+                <a href="@app.ResumePath" target="_blank" class="btn btn-sm btn-outline-primary">View Resume</a>
+            </div>
+
+            <form asp-action="UpdateApplicationStatus" method="post" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="applicationId" value="@app.Id" />
+                <input type="hidden" name="jobId" value="@jobId" />
+                <select name="status" class="form-control status-select" onchange="this.form.submit()">
+                    @foreach (var statusValue in Enum.GetValues(typeof(JobPortal.Models.ApplicationStatus)))
+                    {
+                        if ((int)statusValue == (int)app.Status)
+                        {
+                            <option value="@statusValue" selected>@statusValue</option>
+                        }
+                        else
+                        {
+                            <option value="@statusValue">@statusValue</option>
+                        }
+                    }
+                </select>
+            </form>
+        </div>
+    }
+}
